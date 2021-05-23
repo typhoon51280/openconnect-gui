@@ -2,8 +2,10 @@ package ui
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"log"
+	"net"
 	"net/http"
 )
 
@@ -18,7 +20,29 @@ func CreateHandler() http.Handler {
 	return http.FileServer(http.FS(serverRoot))
 }
 
-func NewServer(listener string) {
+func CreateListener(address string) net.Listener {
+	server, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return server
+}
+
+func Start(listener net.Listener) {
+	defer listener.Close()
+	http.Serve(listener, nil)
+}
+
+func NewServer(address string, start bool) string {
+	if address == "" {
+		address = "127.0.0.1:0"
+	}
 	http.Handle("/", CreateHandler())
-	http.ListenAndServe(listener, nil)
+	listener := CreateListener(address)
+	if start {
+		go Start(listener)
+	}
+	url := fmt.Sprintf("http://%s", listener.Addr())
+	log.Printf("Listen on URL: %s", url)
+	return url
 }

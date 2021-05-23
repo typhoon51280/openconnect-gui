@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 
 	"github.com/typhoon51280/openconnect-gui/internal/electron"
 	"github.com/typhoon51280/openconnect-gui/internal/lorca"
-	"github.com/typhoon51280/openconnect-gui/internal/muon"
 )
 
 // func connect(url string, protocol string, tokenName string, tokenValue string) {
@@ -31,18 +31,16 @@ import (
 
 func main() {
 
-	var engine string
+	var engine, address string
 	flag.StringVar(&engine, "engine", "electron", "Engine type (lorca, muon, electron)")
+	flag.StringVar(&address, "address", "127.0.0.1:0", "Binding Local Server")
 
 	switch engine {
 	case "lorca":
-		lorca.OpenWindow(true, nil)
-		break
-	case "muon":
-		muon.OpenWindow(true, nil)
+		lorca.OpenWindow(true, address, os.Args...)
 		break
 	case "electron":
-		electron.OpenWindow(true, nil)
+		electron.OpenWindow(true, address, os.Args...)
 	}
 
 	log.Println("Shutting down ...")

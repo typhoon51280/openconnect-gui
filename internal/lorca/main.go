@@ -1,7 +1,6 @@
 package lorca
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -15,12 +14,9 @@ func Listen(listener string) {
 
 }
 
-func OpenWindow(wait bool, args []string) lorca.UI {
-	listener := "127.0.0.1:8888"
-	url := fmt.Sprintf("http://%s", listener)
-	log.Println(url)
+func OpenWindow(wait bool, address string, args ...string) lorca.UI {
 
-	go ui.NewServer(listener)
+	url := ui.NewServer(address, true)
 
 	mainUI, err := lorca.New(url, "", 1024, 768, args...)
 	if err != nil {

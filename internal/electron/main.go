@@ -10,17 +10,15 @@ import (
 	"github.com/typhoon51280/openconnect-gui/internal/ui"
 )
 
-func OpenWindow(wait bool, args []string) {
+func OpenWindow(wait bool, address string, args ...string) {
 
-	listener := "127.0.0.1:8888"
-	url := fmt.Sprintf("http://%s", listener)
-	log.Println(url)
+	os.Unsetenv("ELECTRON_RUN_AS_NODE")
 
-	go ui.NewServer(listener)
+	url := ui.NewServer(address, true)
 
 	// Initialize astilectron
 	a, err := astilectron.New(log.New(os.Stderr, "", 0), astilectron.Options{
-		AppName: "Openconnect GUI",
+		AppName: "Openconnect-GUI",
 	})
 	if err != nil {
 		log.Fatal(fmt.Errorf("main: creating astilectron failed: %w", err))
@@ -51,5 +49,7 @@ func OpenWindow(wait bool, args []string) {
 	}
 
 	// Blocking pattern
-	a.Wait()
+	if wait {
+		a.Wait()
+	}
 }
