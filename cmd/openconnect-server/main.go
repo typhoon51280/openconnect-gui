@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	useless "github.com/typhoon51280/openconnect-gui/openconnect"
+	useless "github.com/typhoon51280/openconnect-gui/internal/openconnect"
 )
 
 func main() {

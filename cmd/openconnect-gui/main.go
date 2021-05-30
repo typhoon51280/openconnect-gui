@@ -32,7 +32,7 @@ import (
 func main() {
 
 	var engine, address string
-	flag.StringVar(&engine, "engine", "electron", "Engine type (lorca, muon, electron)")
+	flag.StringVar(&engine, "engine", "lorca", "Engine type (lorca, muon, electron)")
 	flag.StringVar(&address, "address", "127.0.0.1:0", "Binding Local Server")
 
 	switch engine {

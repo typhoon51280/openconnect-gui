@@ -48,6 +48,8 @@ func OpenWindow(wait bool, address string, args ...string) {
 		log.Fatal(fmt.Errorf("main: creating window failed: %w", err))
 	}
 
+	w.OpenDevTools()
+
 	// Blocking pattern
 	if wait {
 		a.Wait()

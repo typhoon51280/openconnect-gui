@@ -6,13 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/koltyakov/lorca"
 	"github.com/typhoon51280/openconnect-gui/internal/ui"
-	"github.com/zserge/lorca"
 )
-
-func Listen(listener string) {
-
-}
 
 func OpenWindow(wait bool, address string, args ...string) lorca.UI {
 

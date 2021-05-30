@@ -7,6 +7,9 @@
 	function login(e: MouseEvent) {
 		console.log("login event", e);
 		console.log("loginUrl", loginUrl);
+		// globalThis.astilectron.sendMessage("login", function(message) {
+        // 	console.log("received " + message)
+    	// });
 		globalThis.login(loginUrl, email, password, false)
 		.then((result) => {
 			console.log("login result:", result);
