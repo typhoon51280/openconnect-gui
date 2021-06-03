@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "npm start",
-            "name": "Run npm start",
+            "command": "npm run build",
+            "name": "npm build",
             "request": "launch",
-            "localRoot": "${workspaceFolder}/cmd/openconnect-gui/frontend",
-            "cwd": "${workspaceFolder}/cmd/openconnect-gui/frontend",
+            "localRoot": "${workspaceFolder}/internal/ui/web",
+            "cwd": "${workspaceFolder}/internal/ui/web",
             "type": "node-terminal"
         },
         {
             "command": "npm run dev",
-            "name": "Run npm dev",
+            "name": "npm dev",
             "request": "launch",
-            "localRoot": "${workspaceFolder}/cmd/openconnect-gui/frontend",
-            "cwd": "${workspaceFolder}/cmd/openconnect-gui/frontend",
+            "localRoot": "${workspaceFolder}/internal/ui/web",
+            "cwd": "${workspaceFolder}/internal/ui/web",
             "type": "node-terminal"
         },
         {
@@ -25,7 +25,16 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd/openconnect-gui"
+            "program": "${workspaceFolder}/cmd/openconnect-gui",
+            "preLaunchTask": "npm: build"
+        },
+        {
+            "name": "Openconnect GUI DEV",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/openconnect-gui",
+            "args": ["--address=127.0.0.1:5000", "-embedded=false"]
         },
         {
             "name": "Openconnect Server",

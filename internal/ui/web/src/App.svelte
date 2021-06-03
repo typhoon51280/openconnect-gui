@@ -1,16 +1,20 @@
 <script lang="ts">
-	import { Button, Form, FormGroup, Input, Label } from 'sveltestrap';
+	import {
+		Container,
+	} from 'sveltestrap';
+	import { onMount } from 'svelte';
+	import type { ConnectionItem } from './Connection.svelte';
+	import Connections from './Connections.svelte';
+	import Menu from './Menu.svelte';
 	export let loginUrl: string = '';
 	export let email: string = '';
 	export let password: string = '';
 	export let cmd: string = '';
-	function login(e: MouseEvent) {
-		console.log("login event", e);
+	// let connections: Array<ConnectionItem> = []
+
+	function login() {
 		console.log("loginUrl", loginUrl);
-		// globalThis.astilectron.sendMessage("login", function(message) {
-        // 	console.log("received " + message)
-    	// });
-		globalThis.login(loginUrl, email, password, false)
+		globalThis.Login(loginUrl, email, password, false)
 		.then((result) => {
 			console.log("login result:", result);
 			if (result) {
@@ -18,10 +22,14 @@
 			}
 		})
 	}
+
 </script>
 
 <main>
-	<Form>
+	<Container id="connectionsPanel">
+		<Menu></Menu>
+		<Connections></Connections>
+	<!-- <Form>
 		<FormGroup>
 			<Label for="loginUrl">Url</Label>
 			<Input
@@ -54,27 +62,9 @@
 			<Input name="cookie" plaintext bind:value="{cmd}" />
 		  </FormGroup>
 	</Form>
-	<Button color="primary" on:click={login}>Login</Button>
+	<Button color="primary" on:click={login}>Login</Button> -->
+	</Container>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>

@@ -82,7 +82,7 @@ func (cookieMonitor *CookieMonitor) findCookie(name string) string {
 
 func getCookies(window lorca.UI) *Cookies {
 	cookies := &Cookies{}
-	response := window.Send("Network.getCookies", nil)
+	response := window.Send("Network.getAllCookies", nil)
 	if response.Err() != nil {
 		log.Printf("%s", response.Err())
 		return cookies

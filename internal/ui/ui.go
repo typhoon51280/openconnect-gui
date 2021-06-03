@@ -33,16 +33,14 @@ func Start(listener net.Listener) {
 	http.Serve(listener, nil)
 }
 
-func NewServer(address string, start bool) string {
-	if address == "" {
-		address = "127.0.0.1:0"
-	}
-	http.Handle("/", CreateHandler())
-	listener := CreateListener(address)
-	if start {
+func NewServer(address string, embedded bool) string {
+	if embedded {
+		http.Handle("/", CreateHandler())
+		listener := CreateListener(address)
+		address = listener.Addr().String()
 		go Start(listener)
+		log.Printf("Listen on URL: %s", address)
 	}
-	url := fmt.Sprintf("http://%s", listener.Addr())
-	log.Printf("Listen on URL: %s", url)
+	url := fmt.Sprintf("http://%s", address)
 	return url
 }

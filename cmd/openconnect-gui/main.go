@@ -32,12 +32,16 @@ import (
 func main() {
 
 	var engine, address string
+	var embedded, wait bool
 	flag.StringVar(&engine, "engine", "lorca", "Engine type (lorca, muon, electron)")
-	flag.StringVar(&address, "address", "127.0.0.1:0", "Binding Local Server")
+	flag.StringVar(&address, "address", "127.0.0.1:0", "UI address")
+	flag.BoolVar(&embedded, "embedded", true, "Start internal server")
+	flag.BoolVar(&wait, "wait", true, "Wait for termination")
+	flag.Parse()
 
 	switch engine {
 	case "lorca":
-		lorca.OpenWindow(true, address, os.Args...)
+		lorca.OpenWindow(address, embedded, wait, os.Args...)
 		break
 	case "electron":
 		electron.OpenWindow(true, address, os.Args...)

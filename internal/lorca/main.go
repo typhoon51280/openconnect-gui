@@ -4,32 +4,78 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"syscall"
 
 	"github.com/koltyakov/lorca"
 	"github.com/typhoon51280/openconnect-gui/internal/ui"
 )
 
-func OpenWindow(wait bool, address string, args ...string) lorca.UI {
+var mainWindow lorca.UI
 
-	url := ui.NewServer(address, true)
+type Connection struct {
+	Name     string `json:"name"`
+	Url      string `json:"url"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Active   bool   `json:"active"`
+}
 
-	mainUI, err := lorca.New(url, "", 1024, 768, args...)
+func OpenWindow(address string, embedded bool, wait bool, args ...string) lorca.UI {
+
+	url := ui.NewServer(address, embedded)
+
+	window, err := lorca.New(url, "", 1024, 768, args...)
 	if err != nil {
 		log.Fatal(err)
 	}
-	mainUI.Bind("login", Login)
+	mainWindow = window
+	window.Bind("Login", Login)
+	window.Bind("Quit", Quit)
+	window.Bind("Init", Init)
+	window.Bind("Connect", Connect)
+	window.Bind("Disconnect", Disconnect)
 	if wait {
-		Wait(mainUI)
+		Wait(window)
 	}
-	return mainUI
+	return window
+}
+
+func Quit() {
+	log.Println("Exit")
+	mainWindow.Close()
+}
+
+func Connect() {
+	log.Println("Connect")
+}
+
+func Disconnect() {
+	log.Println("Disconnect")
+}
+
+func Init() []Connection {
+	log.Println("Init")
+	return []Connection{
+		{
+			Name:     "NFEC",
+			Url:      "https://vpnssl.virtual.posteitaliane.it/NFEC",
+			Username: "ntt3dr7@posteitaliane.it",
+			Password: "Pegasus3",
+		},
+		{
+			Name:     "SDP",
+			Url:      "https://vpnssl.virtual.posteitaliane.it/sdpsvil2",
+			Username: "ntt3dr7@posteitaliane.it",
+			Password: "Pegasus3",
+			Active:   true,
+		},
+	}
 }
 
 func Wait(mainUI lorca.UI) {
 	defer mainUI.Close()
 	// Wait until the interrupt signal arrives or browser window is closed
 	sigc := make(chan os.Signal, 1)
-	signal.Notify(sigc, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigc, os.Interrupt)
 	select {
 	case <-sigc:
 	case <-mainUI.Done():
