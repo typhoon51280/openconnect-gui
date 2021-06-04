@@ -23,20 +23,20 @@ func OpenWindow(address string, embedded bool, wait bool, args ...string) lorca.
 
 	url := ui.NewServer(address, embedded)
 
-	window, err := lorca.New(url, "", 1024, 768, args...)
+	mainWindow, err := lorca.New("", "", 1024, 768, args...)
 	if err != nil {
 		log.Fatal(err)
 	}
-	mainWindow = window
-	window.Bind("Login", Login)
-	window.Bind("Quit", Quit)
-	window.Bind("Init", Init)
-	window.Bind("Connect", Connect)
-	window.Bind("Disconnect", Disconnect)
+	mainWindow.Bind("Login", Login)
+	mainWindow.Bind("Quit", Quit)
+	mainWindow.Bind("Init", Init)
+	mainWindow.Bind("Connect", Connect)
+	mainWindow.Bind("Disconnect", Disconnect)
+	mainWindow.Load(url)
 	if wait {
-		Wait(window)
+		Wait(mainWindow)
 	}
-	return window
+	return mainWindow
 }
 
 func Quit() {
@@ -71,13 +71,13 @@ func Init() []Connection {
 	}
 }
 
-func Wait(mainUI lorca.UI) {
-	defer mainUI.Close()
+func Wait(window lorca.UI) {
+	defer window.Close()
 	// Wait until the interrupt signal arrives or browser window is closed
 	sigc := make(chan os.Signal, 1)
 	signal.Notify(sigc, os.Interrupt)
 	select {
 	case <-sigc:
-	case <-mainUI.Done():
+	case <-window.Done():
 	}
 }

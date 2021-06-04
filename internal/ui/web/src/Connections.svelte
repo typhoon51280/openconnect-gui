@@ -8,26 +8,37 @@
         CardBody,
         CardFooter,
         Accordion,
-        AccordionItem,
-
     } from "sveltestrap";
-    import type { ConnectionItem } from './Connection.svelte';
-    import Connection from './Connection.svelte';
+    import type { ConnectionItem } from "./Connection";
+    import { ConnectionStatus } from "./Connection";
+    import ConnectionModal from './ConnectionModal.svelte';
+import ConnectionView from "./ConnectionView.svelte";
 
     let connections: Array<ConnectionItem> = []
 
     onMount(async () => {
-		connections = await globalThis.Init()
+		connections = await globalThis.Init();
 	});
     
-    let open = false;
-    const toggle = () => (open = !open);
+    let open;
+    let toggle;
 
     const add = (event) => {
         const connection: ConnectionItem = event.detail.connection
-        connection.active = true
-        connections = [...connections, connection]
+        connection.active = true;
+        connections = [...connections, connection];
     }
+
+    const login = (connection: ConnectionItem) => {
+		console.log("loginUrl", connection.url);
+		globalThis.Login(connection)
+		.then((result) => {
+			console.log("login result:", result);
+            if (result) {
+                connection.status = ConnectionStatus.CONNECTED;
+            }
+		})
+	}
 
 </script>
 
@@ -41,12 +52,10 @@
     <CardBody>
         <Accordion>
             {#each connections as connection}
-                <AccordionItem active={connection.active} header={connection.name}>
-                    <p>{connection.url}</p>
-                </AccordionItem>
+                <ConnectionView {connection}></ConnectionView>
             {/each}
         </Accordion>
     </CardBody>
     <CardFooter>Footer</CardFooter>
-    <Connection {open} {toggle} on:add={add}></Connection>
+    <ConnectionModal bind:open bind:toggle on:add={add}></ConnectionModal>
 </Card>
