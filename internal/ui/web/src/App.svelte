@@ -2,14 +2,14 @@
 	import {
 		Container,
 	} from 'sveltestrap';
-	import Connections from './Connections.svelte';
+	import ConnectionPanel from './ConnectionPanel.svelte';
 	import Menu from './Menu.svelte';
 </script>
 
 <main>
 	<Container class="mt-5 pt-3">
 		<Menu></Menu>
-		<Connections></Connections>
+		<ConnectionPanel></ConnectionPanel>
 	</Container>
 </main>
 

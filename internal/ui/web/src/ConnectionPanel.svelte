@@ -9,16 +9,10 @@
         CardFooter,
         Accordion,
     } from "sveltestrap";
-    import type { ConnectionItem } from "./Connection";
-    import { ConnectionStatus } from "./Connection";
+    import type { ConnectionItem } from "./type/Connection";
     import ConnectionModal from './ConnectionModal.svelte';
-import ConnectionView from "./ConnectionView.svelte";
-
-    let connections: Array<ConnectionItem> = []
-
-    onMount(async () => {
-		connections = await globalThis.Init();
-	});
+    import ConnectionView from "./ConnectionView.svelte";
+    import connections from "./store/connections";
     
     let open;
     let toggle;
@@ -26,19 +20,12 @@ import ConnectionView from "./ConnectionView.svelte";
     const add = (event) => {
         const connection: ConnectionItem = event.detail.connection
         connection.active = true;
-        connections = [...connections, connection];
+        connections.add(connection)
     }
 
-    const login = (connection: ConnectionItem) => {
-		console.log("loginUrl", connection.url);
-		globalThis.Login(connection)
-		.then((result) => {
-			console.log("login result:", result);
-            if (result) {
-                connection.status = ConnectionStatus.CONNECTED;
-            }
-		})
-	}
+    onMount(async () => {
+		$connections = await globalThis.Init();
+	});
 
 </script>
 
@@ -51,7 +38,7 @@ import ConnectionView from "./ConnectionView.svelte";
     </CardHeader>
     <CardBody>
         <Accordion>
-            {#each connections as connection}
+            {#each $connections as connection}
                 <ConnectionView {connection}></ConnectionView>
             {/each}
         </Accordion>

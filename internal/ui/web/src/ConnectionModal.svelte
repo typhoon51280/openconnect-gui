@@ -13,15 +13,35 @@
         InputGroup,
         InputGroupText,
     } from "sveltestrap";
-    import type { ConnectionItem, LoginProfile } from "./Connection";
-    
-    export let open = false;
-    export let toggle = () => (open = !open);
+    import { ConnectionStatus } from "./type/Connection";
+    import type { ConnectionItem, LoginProfile } from "./type/Connection";
 
+    export let open = false;
+    export let toggle = () => {
+        formClass = formClass.filter((item) => item !== 'was-validated');
+        connection = {status: ConnectionStatus.DISCONNECTED};
+        open = !open;
+    }
+    
+    let formClass = ['needs-validation'];
     let connection: ConnectionItem = {};
+    const emptyProfile: LoginProfile = {};
     const dispatch = createEventDispatcher();
 
-    const emptyProfile: LoginProfile = {};
+    $: connection.login = connection.autologin ? connection.login : emptyProfile;
+
+    const save = async (event: Event) =>  {
+        event.preventDefault();
+        event.stopPropagation();
+        formClass = [...formClass, 'was-validated']
+        const form: HTMLFormElement = event.target as HTMLFormElement;
+        if (form.checkValidity()) {
+            dispatch('add', {
+                connection: connection
+            });
+            toggle();
+        }
+    }
 
     let profiles: Array<LoginProfile> = [
         emptyProfile,
@@ -36,30 +56,11 @@
             password: "blabla"
         },
     ]
-
-    const autologinChanged = () => {
-        if (connection.autologin) {
-            connection.login = emptyProfile;
-        }
-    }
     
-    const save = async (event: Event) =>  {
-        event.preventDefault();
-        event.stopPropagation();
-        const form: any = event.currentTarget;
-        if (form.checkValidity()) {
-            dispatch('add', {
-                connection: connection
-            });
-            connection = undefined;
-            toggle();
-        }
-        form.classList.add('was-validated');
-    }
 </script>
 
 <Modal isOpen={open} {toggle}>
-    <Form class="needs-validation" novalidate on:submit={save}>
+    <Form class={formClass} novalidate on:submit={save}>
         <ModalHeader {toggle}>Connection</ModalHeader>
         <ModalBody>
             <FormGroup>
@@ -88,7 +89,6 @@
                             name="autologin"
                             addon
                             bind:checked={connection.autologin}
-                            on:change={autologinChanged}
                         />
                     </InputGroupText>
                     <Input
@@ -106,22 +106,6 @@
                     </Input>
                   </InputGroup>
             </FormGroup>
-            <!-- <FormGroup>
-                <Label for="username">Username</Label>
-                <Input
-                    type="text"
-                    name="username"
-                    value={connection.login.username}
-                    required
-                    placeholder="username" />
-            </FormGroup>
-            <FormGroup>
-                <Label for="password">Password</Label>
-                <Password
-                    bind:value={connection.login.password}
-                >
-                </Password>
-            </FormGroup> -->
         </ModalBody>
         <ModalFooter>
         <Button color="primary" type="submit">Save</Button>
