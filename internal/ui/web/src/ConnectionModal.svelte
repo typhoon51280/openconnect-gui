@@ -13,7 +13,7 @@
         InputGroup,
         InputGroupText,
     } from "sveltestrap";
-    import { ConnectionStatus } from "./type/Connection";
+    import { ConnectionStatus } from "./utils/connection";
     import type { ConnectionItem, LoginProfile } from "./type/Connection";
 
     export let open = false;
@@ -108,7 +108,7 @@
             </FormGroup>
         </ModalBody>
         <ModalFooter>
-        <Button color="primary" type="submit">Save</Button>
+        <Button color="danger" type="submit">Save</Button>
         <Button color="secondary" on:click={toggle}>Cancel</Button>
         </ModalFooter>
     </Form>

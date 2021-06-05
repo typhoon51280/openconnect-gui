@@ -3,7 +3,7 @@
         Button,
     } from "sveltestrap";
     import { createEventDispatcher } from "svelte";
-    import { connectionBtnColor, connectionBtnText } from "./type/Connection";
+    import { connectionBtnColor, connectionBtnText } from "./utils/connection";
     import type { ConnectionItem } from "./type/Connection";
 
     export let connection: ConnectionItem;

@@ -2,7 +2,7 @@
     import { 
         AccordionItem, Badge, Label
     } from "sveltestrap";
-    import { connectionColor, ConnectionStatus } from "./type/Connection";
+    import { connectionColor, ConnectionStatus } from "./utils/connection";
     import type { ConnectionItem } from "./type/Connection";
     import ConnectionButton from "./ConnectionButton.svelte";
 
@@ -26,6 +26,6 @@
         <ConnectionButton classes="ms-auto mt-1" {connection} on:connection:toggle={toggleConnection}></ConnectionButton>
     </div>
     <div>
-        <Badge {color}>{connection.status || ConnectionStatus.DISCONNECTED}</Badge>
+        <Badge pill {color}>{connection.status || ConnectionStatus.DISCONNECTED}</Badge>
     </div>
 </AccordionItem>
