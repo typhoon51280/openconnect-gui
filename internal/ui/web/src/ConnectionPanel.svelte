@@ -18,10 +18,11 @@
     
     let open;
     let toggle;
-    let status: string;
+    // let status: string;
 
     $: color = connectionColor($connections.find((item) => item.active));
     $: currentConnection = $connections.find((item) => item.active) || {};
+    $: status = $connections.find((item) => item.active)?.status || '';
 
     const add = (event) => {
         const connection: ConnectionItem = event.detail.connection
@@ -45,14 +46,14 @@
     <CardBody>
         <Accordion>
             {#each $connections as connection}
-                <ConnectionView {connection}></ConnectionView>
+                <ConnectionView on:connection {connection}></ConnectionView>
             {/each}
         </Accordion>
     </CardBody>
     <CardFooter>
         <Alert {color}>
             <h5 class="alert-heading text-capitalize">Status:</h5>
-            <span>{currentConnection.status || ''}</span>
+            <span>{status}</span>
         </Alert>
     </CardFooter>
     <ConnectionModal bind:open bind:toggle on:add={add}></ConnectionModal>

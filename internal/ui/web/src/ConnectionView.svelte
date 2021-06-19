@@ -15,6 +15,7 @@
         console.log('item: ', item);
         console.log('connection: ', connection);
         item.status = ConnectionStatus.ATTEMPTING;
+        item.active = true;
         connection = item
     }
 

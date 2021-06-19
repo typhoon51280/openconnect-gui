@@ -5,6 +5,7 @@
     import { createEventDispatcher } from "svelte";
     import { connectionBtnColor, connectionBtnText } from "./utils/connection";
     import type { ConnectionItem } from "./type/Connection";
+    import connections from "./store/connections";
 
     export let connection: ConnectionItem;
     export let classes: string = "";

@@ -44,8 +44,9 @@ func Quit() {
 	mainWindow.Close()
 }
 
-func Connect() {
+func Connect() bool {
 	log.Println("Connect")
+	return true
 }
 
 func Disconnect() {
